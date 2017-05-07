@@ -1,0 +1,10 @@
+quantum 
+-------
+
+Simulates reverse causality using wave function collapse and quantum entallegement.
+Because you can never observe a scenario in which process exit has been called (since it destroys the universe), you will observe a "fortuitous" timeline in which the given values/data returned by `Entangle` cause your program to complete without exiting.
+
+When there are multiple possible executions of a quantum simulation, we consistently end up trying to observe the lexicographically smallest universe with respect to the iteration order of sequences passed to entangle the given's one. 
+
+ TODO
+| - calm down
