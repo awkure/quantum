@@ -1,8 +1,8 @@
 (* -*- Mode: Pascal; Base: 10; -*- *)
 
-Unit Quantum-Core;
+Unit QCore;
 
-interface
+Interface
 
 {$IFDEF FPC}
     {$MODE DELPHI}
@@ -10,16 +10,23 @@ interface
     {$APPTYPE CONSOLE}
 {$ENDIF}
 
-Uses BaseUnix;
+{$IFDEF Linux}
+    {$DEFINE Unix}
+{$ENDIF}
+
+Uses BaseUnix, Dos, math;
+
+Type PQArr = array of LongInt;
 
 
-Function Collapse (ch : array of Integer) : Integer;
-Function Entangle (un : array of Integer) : Integer;
+Function Collapse (ch : PQArr) : Integer;
+Function Entangle (un : PQArr) : Integer;
 
 
 Implementation 
 
-Function Collapse (ch : array of Integer) : Integer;
+
+Function Collapse (ch : PQArr) : Integer;
 Var 
     idx : Integer;
     phi : Real;
@@ -35,10 +42,10 @@ Begin
     For idx := Low(ch) to High(ch) do
         phi += sqrt(100 / ch[idx]);
 
-    Collapse = pid div sqrt(pid / phi + hsec * phi / log2(sec)) 
+    Collapse := pid div trunc(sqrt(pid / phi + hsec * phi / log2(sec)))
 End;
 
-Function Entangle (un : array of Integer) : Integer;
+Function Entangle (un : PQArr) : Integer;
 Var 
     idx : Integer;
     pid : TPid;
@@ -47,8 +54,9 @@ Begin
     Begin
         pid := FpFork();
         if pid = 0 
-        then Entangle = un[idx];
-        else exit(fpWaitPid(pid, WNOHANG) >> 8);
+        then Entangle := un[idx]
+        else exit(fpWait(pid) >> 8);
+            
     End;
 End;
 
